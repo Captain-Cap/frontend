@@ -7,7 +7,3 @@ app = Flask(__name__)
 def index():
     name_project = 'Captain Cap'
     return render_template('index.html', title_project=name_project)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
