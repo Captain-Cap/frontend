@@ -7,6 +7,7 @@ authors = ["Vladislav Gorokhov <gvsnbala@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Flask = "^2.1.2"
+httpx = "^0.23.0"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.961"
