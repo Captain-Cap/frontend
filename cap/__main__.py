@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 
-from cap.view.balloons import Balloons
+from cap.api.balloons import BalloonApi
 
 app = Flask(__name__)
-balloon = Balloons()
+balloon = BalloonApi()
 
 
 @app.route('/')
@@ -18,7 +18,7 @@ def index():
 def balloons():
     context = {
         'title': 'Balloons',
-        'list_balloons': balloon.get_balloons(),
+        'list_balloons': balloon.get_all(),
     }
     return render_template('balloons.html', context=context)
 
