@@ -1,29 +1,23 @@
 import os
-from dataclasses import dataclass
-from datetime import datetime
 
 import httpx
+import orjson
 
-
-@dataclass
-class Balloon:
-    firm: str
-    paint_code: str
-    color: str
-    volume: int
-    weight: int
-    acceptance_date: datetime
+from cap.model.schemas import BalloonModel
 
 
 class BalloonApi:
-    BACKEND_URL = os.environ['BACKEND_URL']
-    url = '/api/v1/balloons/'
 
-    def get_all(self) -> list[Balloon]:
-        response = httpx.get(self.BACKEND_URL + self.url)
+    def __init__(self):
+        self.backend_url = os.environ['BACKEND_URL']
+        self.url = '/api/v1/balloons/'
+
+    def get_all(self) -> list[BalloonModel]:
+        response = httpx.get(self.backend_url + self.url)
         response.raise_for_status()
 
-        return [Balloon(
+        return [BalloonModel(
+            uid=balloon['uid'],
             firm=balloon['firm'],
             paint_code=balloon['paint_code'],
             color=balloon['color'],
@@ -32,3 +26,10 @@ class BalloonApi:
             acceptance_date=balloon['acceptance_date'],
         ) for balloon in response.json()
         ]
+
+    def add(self, balloon: BalloonModel) -> None:
+        json_balloon = orjson.dumps(BalloonModel.from_orm(balloon).dict())
+        headers = {
+            'Content-Type': 'application/json',
+        }
+        httpx.post(self.backend_url + self.url, data=json_balloon, headers=headers)
