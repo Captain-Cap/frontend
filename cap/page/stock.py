@@ -32,7 +32,7 @@ def add_balloon():
         color=balloon['color'],
         volume=balloon['volume'],
         weight=balloon['weight'],
-        acceptance_date=str(datetime.now()),
+        acceptance_date=datetime.now(),
     )
     balloon_api.add(payload)
     return redirect(url_for('stock.all_balloons'))
