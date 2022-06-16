@@ -1,35 +1,26 @@
-import os
-
 import httpx
 import orjson
 
-from cap.model.schemas import BalloonModel
+from cap.api.schemas import BalloonModel
 
 
 class BalloonApi:
 
-    def __init__(self):
-        self.backend_url = os.environ['BACKEND_URL']
-        self.url = '/api/v1/balloons/'
+    def __init__(self, url: str) -> None:
+        self.url = url
 
     def get_all(self) -> list[BalloonModel]:
-        response = httpx.get(self.backend_url + self.url)
+        response = httpx.get(f'{self.url}/api/v1/balloons/')
         response.raise_for_status()
+        return [BalloonModel(**balloon) for balloon in response.json()]
 
-        return [BalloonModel(
-            uid=balloon['uid'],
-            firm=balloon['firm'],
-            paint_code=balloon['paint_code'],
-            color=balloon['color'],
-            volume=balloon['volume'],
-            weight=balloon['weight'],
-            acceptance_date=balloon['acceptance_date'],
-        ) for balloon in response.json()
-        ]
-
-    def add(self, balloon: BalloonModel) -> None:
-        json_balloon = orjson.dumps(BalloonModel.from_orm(balloon).dict())
+    def add(self, balloon: BalloonModel) -> BalloonModel:
+        json_balloon = orjson.dumps(balloon.dict())
         headers = {
             'Content-Type': 'application/json',
         }
-        httpx.post(self.backend_url + self.url, data=json_balloon, headers=headers)
+        respose = httpx.post(f'{self.url}/api/v1/balloons/', data=json_balloon, headers=headers)
+        respose.raise_for_status()
+
+        balloon = respose.json()
+        return BalloonModel(**balloon)
