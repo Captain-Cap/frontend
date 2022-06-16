@@ -12,7 +12,7 @@ class BalloonModel(BaseModel):
     color: str
     volume: int
     weight: PositiveInt
-    acceptance_date: datetime
+    acceptance_date: Optional[datetime]
 
     class Config:
         orm_mode = True
