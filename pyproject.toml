@@ -8,6 +8,9 @@ authors = ["Vladislav Gorokhov <gvsnbala@gmail.com>"]
 python = "^3.10"
 Flask = "^2.1.2"
 httpx = "^0.23.0"
+Flask-WTF = "^1.0.1"
+pydantic = "^1.9.1"
+orjson = "^3.7.2"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.961"

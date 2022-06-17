@@ -1,27 +1,17 @@
-from flask import Flask, render_template
+import os
 
-from cap.api.balloons import BalloonApi
+from flask import Flask
+
+from cap.config import APP_HOST, APP_PORT
+from cap.page.index import index
+from cap.page.stock import stock
 
 app = Flask(__name__)
-balloon = BalloonApi()
+app.register_blueprint(index, url_prefix='/')
+app.register_blueprint(stock, url_prefix='/stock/')
 
-
-@app.route('/')
-def index():
-    context = {
-        'title_project': 'Captain Cap',
-    }
-    return render_template('index.html', context=context)
-
-
-@app.route('/balloons')
-def balloons():
-    context = {
-        'title': 'Balloons',
-        'list_balloons': balloon.get_all(),
-    }
-    return render_template('balloons.html', context=context)
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host=APP_HOST, port=APP_PORT)
