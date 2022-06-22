@@ -19,6 +19,8 @@ def all_balloons():
         'list_balloons': balloon_api.get_all(),
         'form': AddBalloonForm(),
     }
+    for balloon in context['list_balloons']:
+        balloon.acceptance_date = balloon.acceptance_date.strftime('%m/%d/%Y %H:%M:%S')
     return render_template('stock.html', context=context)
 
 
@@ -28,3 +30,9 @@ def add_balloon():
     balloon.acceptance_date = datetime.now()
     balloon_api.add(balloon)
     return redirect(url_for('stock.all_balloons'))
+
+
+@stock.delete('/<int:uid>')
+def del_balloon(uid):
+    balloon_api.delete(uid)
+    return {}, 204
