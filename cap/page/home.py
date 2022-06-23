@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template
 
-index = Blueprint('index', __name__)
+home = Blueprint('home', __name__)
 
 
-@index.get('/')
+@home.get('/')
 def start():
     context = {
         'title_project': 'Captain Cap',
     }
-    return render_template('index.html', context=context)
+    return render_template('home.html', context=context)

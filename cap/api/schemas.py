@@ -11,9 +11,19 @@ class BalloonModel(BaseModel):
     paint_code: str
     color: str
     volume: int
-    weight: PositiveInt
+    weight: float
     acceptance_date: Optional[datetime]
 
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
+
+
+class ProjectsModel(BaseModel):
+
+    uid: PositiveInt
+    name: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True

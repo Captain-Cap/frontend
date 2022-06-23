@@ -24,3 +24,7 @@ class BalloonApi:
 
         balloon = respose.json()
         return BalloonModel(**balloon)
+
+    def delete(self, uid) -> None:
+        response = httpx.delete(f'{self.url}/api/v1/balloons/{uid}')
+        response.raise_for_status()
