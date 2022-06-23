@@ -11,7 +11,7 @@ class BalloonModel(BaseModel):
     paint_code: str
     color: str
     volume: int
-    weight: PositiveInt
+    weight: float
     acceptance_date: Optional[datetime]
 
     class Config:

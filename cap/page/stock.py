@@ -24,7 +24,7 @@ def all_balloons():
     return render_template('stock.html', context=context)
 
 
-@stock.post('/')
+@stock.post('/add_balloon')
 def add_balloon():
     balloon = BalloonModel(**request.form)
     balloon.acceptance_date = datetime.now()
