@@ -1,4 +1,15 @@
 import os
+from dataclasses import dataclass
 
-APP_HOST = os.environ['APP_HOST']
-APP_PORT = int(os.environ['APP_PORT'])
+
+@dataclass
+class Config:
+
+    app_host: str
+    app_port: int
+
+
+config = Config(
+    os.environ['APP_HOST'],
+    int(os.environ['APP_PORT']),
+)
