@@ -1,13 +1,13 @@
-import os
 from datetime import datetime
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from cap.api.balloons import BalloonApi
 from cap.api.schemas import BalloonModel
+from cap.config import config
 from cap.forms import AddBalloonForm
 
-balloon_api = BalloonApi(os.environ['BACKEND_URL'])
+balloon_api = BalloonApi(config.url)
 
 stock = Blueprint('stock', __name__)
 

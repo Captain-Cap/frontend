@@ -7,9 +7,11 @@ class Config:
 
     app_host: str
     app_port: int
+    url: str
 
 
 config = Config(
-    os.environ['APP_HOST'],
-    int(os.environ['APP_PORT']),
+    app_host=os.environ['APP_HOST'],
+    app_port=int(os.environ['APP_PORT']),
+    url=os.environ['BACKEND_URL'],
 )

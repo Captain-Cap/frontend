@@ -1,12 +1,11 @@
-import os
-
 from flask import Blueprint, render_template
 
 from cap.api.projects import ProjectsApi
+from cap.config import config
 
 projects = Blueprint('projects', __name__)
 
-projapi = ProjectsApi(os.environ['BACKEND_URL'])
+projapi = ProjectsApi(config.url)
 
 
 @projects.get('/')
