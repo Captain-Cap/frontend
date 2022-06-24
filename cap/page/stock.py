@@ -32,7 +32,8 @@ def add_balloon():
     return redirect(url_for('stock.all_balloons'))
 
 
-@stock.delete('/<int:uid>')
-def del_balloon(uid):
+@stock.post('/delete')
+def delete():
+    uid = request.form['uid']
     balloon_api.delete(uid)
-    return {}, 204
+    return redirect(url_for('stock.all_balloons'))
