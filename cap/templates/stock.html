@@ -124,7 +124,7 @@
                                             ...
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <button class="btn" type="submit" href="#">Edit</button>
+                                            <a class="btn" href="{{ url_for('stock.edit', uid=balloon.uid) }}">Edit</a>
                                             <button
                                                 id="delete"
                                                 class="btn"

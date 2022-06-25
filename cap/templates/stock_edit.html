@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="{{url_for('static', filename='stock.js')}}"></script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .card {
+        border-radius: 1em;
+        text-align: center;
+        padding: 1em;
+    }
+    .svg-inline--fa.fa-w-16 {
+        width: 1em;
+    }
+    .fs--1 {
+        font-size: .8333333333rem !important;
+    }
+    .svg-inline--fa {
+        display: inline-block;
+        font-size: inherit;
+        height: 1em;
+        overflow: visible;
+        vertical-align: -.125em;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-2">
+    <div class="row">
+        <div class="col-1">
+            <form action="{{ url_for('stock.edit', uid=balloon.uid) }}" method="post">
+                    <input type="hidden" name="uid" value="{{ balloon.uid }}">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" name="firm" value="{{ balloon.firm }}" id="Firm" required>
+                        <label for="floatingInput">Firm</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" name="paint_code" value="{{ balloon.paint_code }}" id="paint_code" required>
+                        <label for="floatingPassword">Paint code</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" name="color" value="{{ balloon.color }}" id="color" required>
+                        <label for="floatingPassword">Color</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" name="volume" value="{{ balloon.volume }}" id="volume" required>
+                        <label for="floatingPassword">Volume</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control" name="weight" id="weight" value="{{ balloon.weight }}" required>
+                        <label for="floatingPassword">Weight</label>
+                    </div>
+                    <input type="hidden" name="acceptance_date" value="{{ balloon.acceptance_date }}">
+                    <button type="submit" class="btn btn-success">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

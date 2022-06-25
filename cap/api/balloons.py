@@ -14,6 +14,13 @@ class BalloonApi:
         response.raise_for_status()
         return [BalloonModel(**balloon) for balloon in response.json()]
 
+    def get_by_id(self, uid: int) -> BalloonModel:
+        response = httpx.get(f'{self.url}/api/v1/balloons/{uid}')
+        response.raise_for_status()
+        payload = response.json()
+
+        return BalloonModel(**payload)
+
     def add(self, balloon: BalloonModel) -> BalloonModel:
         json_balloon = orjson.dumps(balloon.dict())
         headers = {

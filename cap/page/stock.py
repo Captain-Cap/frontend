@@ -37,3 +37,17 @@ def delete():
     uid = request.form['uid']
     client.balloons.delete(uid)
     return redirect(url_for('stock.all_balloons'))
+
+
+@stock.get('/edit/<int:uid>')
+def edit_page(uid):
+    balloon = client.balloons.get_by_id(uid)
+    return render_template('stock_edit.html', balloon=balloon)
+
+
+@stock.post('/edit/<int:uid>')
+def edit(uid):
+    payload = request.form
+    balloon = BalloonModel(**payload)
+    client.balloons.update(balloon)
+    return redirect(url_for('stock.all_balloons'))
