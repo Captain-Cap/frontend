@@ -3,19 +3,15 @@ from typing import Any
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
-from cap.api.balloons import BalloonApi
-from cap.api.schemas import BalloonModel
-from cap.config import config
+from cap.api import BalloonModel, client
 from cap.forms import AddBalloonForm
-
-balloon_api = BalloonApi(config.url)
 
 stock = Blueprint('stock', __name__)
 
 
 @stock.get('/')
 def all_balloons():
-    balloons = balloon_api.get_all()
+    balloons = client.balloons.get_all()
     return render_template(
         'stock.html',
         title='Balloons',
@@ -31,7 +27,7 @@ def add_balloon():
     payload['acceptance_date'] = datetime.now()
 
     balloon = BalloonModel(**request.form)
-    balloon_api.add(balloon)
+    client.balloons.add(balloon)
 
     return redirect(url_for('stock.all_balloons'))
 
@@ -39,5 +35,5 @@ def add_balloon():
 @stock.post('/delete')
 def delete():
     uid = request.form['uid']
-    balloon_api.delete(uid)
+    client.balloons.delete(uid)
     return redirect(url_for('stock.all_balloons'))
