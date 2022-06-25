@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
@@ -14,21 +15,24 @@ stock = Blueprint('stock', __name__)
 
 @stock.get('/')
 def all_balloons():
-    context = {
-        'title': 'Balloons',
-        'list_balloons': balloon_api.get_all(),
-        'form': AddBalloonForm(),
-    }
-    for balloon in context['list_balloons']:
-        balloon.acceptance_date = balloon.acceptance_date.strftime('%m/%d/%Y %H:%M:%S')
-    return render_template('stock.html', context=context)
+    balloons = balloon_api.get_all()
+    return render_template(
+        'stock.html',
+        title='Balloons',
+        balloons=balloons,
+        form=AddBalloonForm(),
+    )
 
 
 @stock.post('/add_balloon')
 def add_balloon():
+    payload: dict[str, Any] = request.form
+    payload['uid'] = -1
+    payload['acceptance_date'] = datetime.now()
+
     balloon = BalloonModel(**request.form)
-    balloon.acceptance_date = datetime.now()
     balloon_api.add(balloon)
+
     return redirect(url_for('stock.all_balloons'))
 
 

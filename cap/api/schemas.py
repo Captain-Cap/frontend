@@ -1,18 +1,21 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, PositiveInt
 
 
 class BalloonModel(BaseModel):
 
-    uid: Optional[PositiveInt]
+    uid: int
     firm: str
     paint_code: str
     color: str
     volume: int
     weight: float
-    acceptance_date: Optional[datetime]
+    acceptance_date: datetime
+
+    @property
+    def acceptance(self) -> str:
+        return self.acceptance_date.strftime('%m/%d/%Y %H:%M:%S')
 
     class Config:
         orm_mode = True
