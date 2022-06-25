@@ -19,11 +19,11 @@ class BalloonApi:
         headers = {
             'Content-Type': 'application/json',
         }
-        respose = httpx.post(f'{self.url}/api/v1/balloons/', data=json_balloon, headers=headers)
+        respose = httpx.post(f'{self.url}/api/v1/balloons/', content=json_balloon, headers=headers)
         respose.raise_for_status()
 
-        balloon = respose.json()
-        return BalloonModel(**balloon)
+        payload = respose.json()
+        return BalloonModel(**payload)
 
     def delete(self, uid) -> None:
         response = httpx.delete(f'{self.url}/api/v1/balloons/{uid}')
