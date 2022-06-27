@@ -2,7 +2,7 @@
 export
 
 run:
-	python -m cap
+	@python -m cap
 
 lint:
 	@mypy cap
