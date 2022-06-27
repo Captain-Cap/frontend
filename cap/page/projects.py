@@ -1,16 +1,11 @@
 from flask import Blueprint, render_template
 
-from cap.api.projects import ProjectsApi
-from cap.config import config
+from cap.api import client
 
-projects = Blueprint('projects', __name__)
-
-projapi = ProjectsApi(config.url)
+projects_view = Blueprint('projects', __name__)
 
 
-@projects.get('/')
+@projects_view.get('/')
 def start():
-    context = {
-        'list_projects': projapi.get_all(),
-    }
-    return render_template('projects.html', context=context)
+    projects = client.projects.get_all()
+    return render_template('projects.html', projects=projects)

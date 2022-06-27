@@ -4,13 +4,13 @@ from flask import Flask
 
 from cap.config import config
 from cap.page.home import home
-from cap.page.projects import projects
+from cap.page.projects import projects_view
 from cap.page.stock import stock
 
 app = Flask(__name__)
 app.register_blueprint(home, url_prefix='/')
 app.register_blueprint(stock, url_prefix='/stock')
-app.register_blueprint(projects, url_prefix='/projects')
+app.register_blueprint(projects_view, url_prefix='/projects')
 
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 

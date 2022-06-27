@@ -1,221 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Stock</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-              rel="stylesheet"
-              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-              crossorigin="anonymous"
-        />
+{% extends "base.html" %}
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon/favicon-16x16.png">
-        <link rel="manifest" href="/static/images/favicon/site.webmanifest">
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="{{url_for('static', filename='stock.js')}}"></script>
+{% endblock %}
 
+{% block styles %}
+<style>
+    .card {
+        border-radius: 1em;
+        text-align: center;
+        padding: 1em;
+    }
+    .svg-inline--fa.fa-w-16 {
+        width: 1em;
+    }
+    .fs--1 {
+        font-size: .8333333333rem !important;
+    }
+    .svg-inline--fa {
+        display: inline-block;
+        font-size: inherit;
+        height: 1em;
+        overflow: visible;
+        vertical-align: -.125em;
+    }
+    </style>
+{% endblock %}
 
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-                crossorigin="anonymous">
-        </script>
+{% block content %}
 
-        <script src="{{url_for('static', filename='stock.js')}}"></script>
+<div class="container my-2">
+    <div class="row justify-content-end">
 
-        <style>
-            .card {
-              border-radius: 1em;
-              text-align: center;
-              padding: 1em;
-            }
-            .svg-inline--fa.fa-w-16 {
-                width: 1em;
-            }
-            .fs--1 {
-                font-size: .8333333333rem !important;
-            }
-            .svg-inline--fa {
-                display: inline-block;
-                font-size: inherit;
-                height: 1em;
-                overflow: visible;
-                vertical-align: -.125em;
-            }
-          </style>
-
-    </head>
-    <body>
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-              <a class="navbar-brand p-0" href="/">
-                <img src="/static/images/cap.png" alt="Captain Cap" width="150">
-              </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link active" href="/stock">Stock</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/projects">Projects</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-        </nav>
-
-        <div class="container my-2">
-            <div class="row justify-content-end">
-
-                <!-- <div class="col-2">
-                    <div class="ms-3" id="bulk-select-actions">
-                        <div class="d-flex">
-                            <select class="form-select form-select-sm" aria-label="Bulk actions">
-                                <option value="Delete">Delete</option>
-                                <option value="Archive">Edit</option>
-                            </select>
-                            <button class="btn btn-success btn-sm ms-2" type="button">Apply</button>
-                        </div>
-                    </div>
-                </div> -->
-
-                <div class="col-1">
-                    <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">+ Add</button>
-                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                            <div class="offcanvas-header">
-                                <h5 id="offcanvasRightLabel">Add an aerosol can</h5>
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                            </div>
-                            <div class="offcanvas-body">
-                                <form action="/stock/add_balloon" method="post">
-                                      <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" name="firm" id="Firm" required>
-                                        <label for="floatingInput">Firm</label>
-                                      </div>
-                                      <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" name="paint_code" id="paint_code" required>
-                                        <label for="floatingPassword">Paint code</label>
-                                      </div>
-                                      <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" name="color" id="color" required>
-                                        <label for="floatingPassword">Color</label>
-                                      </div>
-                                      <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" name="volume" id="volume" required>
-                                        <label for="floatingPassword">Volume</label>
-                                      </div>
-                                      <div class="form-floating mb-2">
-                                        <input type="number" class="form-control" name="weight" id="weight" required>
-                                        <label for="floatingPassword">Weight</label>
-                                      </div>
-                                      <button type="submit" class="btn btn-success">Add</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+        <!-- <div class="col-2">
+            <div class="ms-3" id="bulk-select-actions">
+                <div class="d-flex">
+                    <select class="form-select form-select-sm" aria-label="Bulk actions">
+                        <option value="Delete">Delete</option>
+                        <option value="Archive">Edit</option>
+                    </select>
+                    <button class="btn btn-success btn-sm ms-2" type="button">Apply</button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-
-        <div class="container my-2">
-            <div class="row">
-                <div class="card col-lg-12 col-md-8 cols-lg-3 mx-auto">
-                    <div class="col-lg-12 col-md-8 cols-lg-3 mx-auto">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr class="fw-bolder fs-6 text-gray-800">
-                                    <!-- <th></th> -->
-                                    <th>ID</th>
-                                    <th>Firm</th>
-                                    <th>Paint code</th>
-                                    <th>Color</th>
-                                    <th>Volume</th>
-                                    <th>Weight</th>
-                                    <th>Acceptance date</th>
-                                    <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for balloon in context.list_balloons %}
-                                    <tr>
-                                        <!-- <td class="align-middle white-space-nowrap">
-                                            <div class="form-check mb-0">
-                                                <input class="form-check-input" type="checkbox" id="checkbox-1" checked="false">
-                                            </div>
-                                        </td> -->
-                                        <td>{{ balloon.uid }}</td>
-                                        <td>{{ balloon.firm }}</td>
-                                        <td>{{ balloon.paint_code }}</td>
-                                        <td>{{ balloon.color }}</td>
-                                        <td>{{ balloon.volume }}</td>
-                                        <td>{{balloon.weight}}</td>
-                                        <td>{{ balloon.acceptance_date }}</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                  ...
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <button class="btn" type="submit" href="#">Edit</button>
-                                                    <button
-                                                        id="delete"
-                                                        class="btn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteBalloonModal"
-                                                        data-balloon-info="{{ balloon.firm }} {{ balloon.paint_code }}"
-                                                        data-balloon-id="{{ balloon.uid }}"
-                                                        href="#deleteBalloonModal"
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+        <div class="col-1">
+            <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">+ Add</button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 id="offcanvasRightLabel">Add an aerosol can</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="deleteBalloonModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Удалить балончик</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ url_for('stock.delete') }}" method="POST">
-                            <div class="form-group">
-                                <input type="hidden" name="uid">
-                                <small id="deleteBalloonInfo" class="form-text text-muted">info</small>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Delete</button>
+                    <div class="offcanvas-body">
+                        <form action="/stock/add_balloon" method="post">
+                                <div class="form-floating mb-2">
+                                <input type="text" class="form-control" name="firm" id="Firm" required>
+                                <label for="floatingInput">Firm</label>
                                 </div>
-                            </div>
-
+                                <div class="form-floating mb-2">
+                                <input type="text" class="form-control" name="paint_code" id="paint_code" required>
+                                <label for="floatingPassword">Paint code</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                <input type="text" class="form-control" name="color" id="color" required>
+                                <label for="floatingPassword">Color</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                <input type="text" class="form-control" name="volume" id="volume" required>
+                                <label for="floatingPassword">Volume</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                <input type="number" class="form-control" name="weight" id="weight" required>
+                                <label for="floatingPassword">Weight</label>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add</button>
                         </form>
                     </div>
-
-                  </div>
                 </div>
-              </div>
+            </div>
         </div>
+    </div>
+</div>
 
 
-      </body>
-</html>
+<div class="container my-2">
+    <div class="row">
+        <div class="card col-lg-12 col-md-8 cols-lg-3 mx-auto">
+            <div class="col-lg-12 col-md-8 cols-lg-3 mx-auto">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-gray-800">
+                            <!-- <th></th> -->
+                            <th>ID</th>
+                            <th>Firm</th>
+                            <th>Paint code</th>
+                            <th>Color</th>
+                            <th>Volume</th>
+                            <th>Weight</th>
+                            <th>Acceptance date</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for balloon in balloons %}
+                            <tr>
+                                <!-- <td class="align-middle white-space-nowrap">
+                                    <div class="form-check mb-0">
+                                        <input class="form-check-input" type="checkbox" id="checkbox-1" checked="false">
+                                    </div>
+                                </td> -->
+                                <td>{{ balloon.uid }}</td>
+                                <td>{{ balloon.firm }}</td>
+                                <td>{{ balloon.paint_code }}</td>
+                                <td>{{ balloon.color }}</td>
+                                <td>{{ balloon.volume }}</td>
+                                <td>{{ balloon.weight }}</td>
+                                <td>{{ balloon.acceptance }}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ...
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="btn" href="{{ url_for('stock.edit', uid=balloon.uid) }}">Edit</a>
+                                            <button
+                                                id="delete"
+                                                class="btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteBalloonModal"
+                                                data-balloon-info="{{ balloon.firm }} {{ balloon.paint_code }}"
+                                                data-balloon-id="{{ balloon.uid }}"
+                                                href="#deleteBalloonModal"
+                                            >
+                                                Delete
+                                            </button>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteBalloonModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Удалить балончик</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('stock.delete') }}" method="POST">
+                    <div class="form-group">
+                        <input type="hidden" name="uid">
+                        <small id="deleteBalloonInfo" class="form-text text-muted">info</small>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            </div>
+        </div>
+        </div>
+</div>
+{% endblock %}
