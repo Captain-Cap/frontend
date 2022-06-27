@@ -22,11 +22,11 @@ def all_balloons():
 
 @stock.post('/add_balloon')
 def add_balloon():
-    payload: dict[str, Any] = request.form
+    payload: dict[str, Any] = dict(request.form)
     payload['uid'] = -1
     payload['acceptance_date'] = datetime.now()
 
-    balloon = BalloonModel(**request.form)
+    balloon = BalloonModel(**payload)
     client.balloons.add(balloon)
 
     return redirect(url_for('stock.all_balloons'))
@@ -47,7 +47,9 @@ def edit_page(uid):
 
 @stock.post('/edit/<int:uid>')
 def edit(uid):
-    payload = request.form
+    payload: dict[str, Any] = dict(request.form)
+    payload['uid'] = uid
+    payload['acceptance_date'] = -1
     balloon = BalloonModel(**payload)
     client.balloons.update(balloon)
     return redirect(url_for('stock.all_balloons'))
