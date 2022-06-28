@@ -24,7 +24,6 @@ def edit_page(uid):
 def edit(uid):
     payload: dict[str, Any] = dict(request.form)
     payload['uid'] = uid
-    payload['created_at'] = -1
     project = ProjectsModel(**payload)
     client.projects.update(project)
     return redirect(url_for('projects.all_projects'))
