@@ -32,25 +32,73 @@
 
 {% block content %}
 
-        <div class="container my-3">
-          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+<div class="container my-2">
+    <div class="row justify-content-end">
+        <div class="col-1">
+            <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">+ Add</button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 id="offcanvasRightLabel">Add project</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <form action="/stock/add_balloon" method="post">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" name="name" id="name" required>
+                                    <label for="floatingInput">Name project</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" name="description" id="description" required>
+                                    <label for="floatingPassword">description</label>
+                                </div>
+                                <button type="submit" class="btn btn-success">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
 
-            {% for projects in projects %}
-            <div class="col">
-              <div class="card rounded-card">
-                <img src="https://img.freepik.com/free-vector/graffiti-spray-can-illustration-of-street-art-on-dark-background_300579-121.jpg" class="card-img-top rounded-img" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">{{ projects.name }}</h5>
-                  <p class="card-text">
-                    Some generated text. Description of something. Here will be the text describing the project.
-                  </p>
-                  <a href="https://img.freepik.com/free-vector/graffiti-spray-can-illustration-of-street-art-on-dark-background_300579-121.jpg" target="_blank" class="btn btn-primary">More</a>
+
+
+<div class="container my-3">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2">
+
+    {% for projects in projects %}
+    <div class="col">
+        <div class="card rounded-card">
+        <img src="https://img.freepik.com/free-vector/graffiti-spray-can-illustration-of-street-art-on-dark-background_300579-121.jpg" class="card-img-top rounded-img" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{ projects.name }}</h5>
+            <p class="card-text">
+            Some generated text. Description of something. Here will be the text describing the project.
+            </p>
+            <a href="https://img.freepik.com/free-vector/graffiti-spray-can-illustration-of-street-art-on-dark-background_300579-121.jpg" target="_blank" class="btn btn-primary rounded-card">More</a>
+            <a href="{{ url_for('projects.edit_page', uid=projects.uid) }}" class="btn btn-success rounded-card">Edit</a>
+            <a href="#" class="btn btn-danger rounded-card" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Detele</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the project?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-danger">Delete</button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            {% endfor %}
-
-          </div>
         </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    </div>
+</div>
 {% endblock %}
 

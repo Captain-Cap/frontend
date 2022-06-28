@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="{{url_for('static', filename='stock.js')}}"></script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .card {
+        border-radius: 1em;
+        text-align: center;
+        padding: 1em;
+    }
+    .svg-inline--fa.fa-w-16 {
+        width: 1em;
+    }
+    .fs--1 {
+        font-size: .8333333333rem !important;
+    }
+    .svg-inline--fa {
+        display: inline-block;
+        font-size: inherit;
+        height: 1em;
+        overflow: visible;
+        vertical-align: -.125em;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-2">
+    <div class="row">
+        <div class="col-4">
+            <form action="{{ url_for('projects.edit', uid=project.uid) }}" method="post">
+                    <input type="hidden" name="uid" value="{{ project.uid }}">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" name="name" value="{{ project.name }}" id="name" required>
+                        <label for="floatingInput">Name</label>
+                    </div>
+                    <input type="hidden" name="created_at" value="{{ project.created_at }}">
+                    <button type="submit" class="btn btn-success">Add</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
