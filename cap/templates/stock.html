@@ -55,24 +55,32 @@
                     <div class="offcanvas-body">
                         <form action="/stock/add_balloon" method="post">
                                 <div class="form-floating mb-2">
-                                <input type="text" class="form-control" name="firm" id="Firm" required>
-                                <label for="floatingInput">Firm</label>
+                                    <input type="text" class="form-control" name="firm" id="Firm" required>
+                                    <label for="floatingInput">Firm</label>
                                 </div>
                                 <div class="form-floating mb-2">
-                                <input type="text" class="form-control" name="paint_code" id="paint_code" required>
-                                <label for="floatingPassword">Paint code</label>
+                                    <input type="text" class="form-control" name="paint_code" id="paint_code" required>
+                                    <label for="floatingPassword">Paint code</label>
                                 </div>
                                 <div class="form-floating mb-2">
-                                <input type="text" class="form-control" name="color" id="color" required>
-                                <label for="floatingPassword">Color</label>
+                                    <input type="text" class="form-control" name="color" id="color" required>
+                                    <label for="floatingPassword">Color</label>
                                 </div>
                                 <div class="form-floating mb-2">
-                                <input type="text" class="form-control" name="volume" id="volume" required>
-                                <label for="floatingPassword">Volume</label>
+                                    <input type="text" class="form-control" name="volume" id="volume" required>
+                                    <label for="floatingPassword">Volume</label>
                                 </div>
                                 <div class="form-floating mb-2">
-                                <input type="number" class="form-control" name="weight" id="weight" required>
-                                <label for="floatingPassword">Weight</label>
+                                    <input type="number" class="form-control" name="weight" id="weight" required>
+                                    <label for="floatingPassword">Weight</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <select id="disabledSelect" class="form-select" name="project">
+                                        {% for project in projects %}
+                                            <option value="{{ project.name }}">{{ project.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="floatingPassword">Project</label>
                                 </div>
                                 <button type="submit" class="btn btn-success">Add</button>
                         </form>
@@ -99,6 +107,7 @@
                             <th>Color</th>
                             <th>Volume</th>
                             <th>Weight</th>
+                            <th>Project</th>
                             <th>Acceptance date</th>
                             <th>Actions</th>
                             </tr>
@@ -117,6 +126,7 @@
                                 <td>{{ balloon.color }}</td>
                                 <td>{{ balloon.volume }}</td>
                                 <td>{{ balloon.weight }}</td>
+                                <td>{{ balloon.project }}</td>
                                 <td>{{ balloon.acceptance }}</td>
                                 <td>
                                     <div class="dropdown">

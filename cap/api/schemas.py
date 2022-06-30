@@ -12,6 +12,7 @@ class BalloonModel(BaseModel):
     volume: int
     weight: float
     acceptance_date: datetime
+    project: str
 
     @property
     def acceptance(self) -> str:

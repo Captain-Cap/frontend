@@ -12,10 +12,12 @@ stock = Blueprint('stock', __name__)
 @stock.get('/')
 def all_balloons():
     balloons = client.balloons.get_all()
+    projects = client.projects.get_all()
     return render_template(
         'stock.html',
         title='Balloons',
         balloons=balloons,
+        projects=projects,
         form=AddBalloonForm(),
     )
 
@@ -42,7 +44,8 @@ def delete():
 @stock.get('/edit/<int:uid>')
 def edit_page(uid):
     balloon = client.balloons.get_by_id(uid)
-    return render_template('stock_edit.html', balloon=balloon)
+    projects = client.projects.get_all()
+    return render_template('stock_edit.html', balloon=balloon, projects=projects)
 
 
 @stock.post('/edit/<int:uid>')
