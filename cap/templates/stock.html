@@ -7,24 +7,32 @@
 
 {% block styles %}
 <style>
-    .card {
+        .card {
         border-radius: 1em;
         text-align: center;
         padding: 1em;
-    }
-    .svg-inline--fa.fa-w-16 {
-        width: 1em;
-    }
-    .fs--1 {
-        font-size: .8333333333rem !important;
-    }
-    .svg-inline--fa {
-        display: inline-block;
-        font-size: inherit;
-        height: 1em;
-        overflow: visible;
-        vertical-align: -.125em;
-    }
+        }
+        .card:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+        border-radius: 90%;
+        width: 60%;
+        margin: auto;
+        }
+        .rounded-img {
+            width: 50%;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 0.5em;
+            margin-bottom: 1em;
+        }
+        .rounded-card {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            padding: 0.5em;
+            margin-bottom: 1em;
+        }
+
     </style>
 {% endblock %}
 
@@ -33,17 +41,12 @@
 <div class="container my-2">
     <div class="row justify-content-end">
 
-        <!-- <div class="col-2">
-            <div class="ms-3" id="bulk-select-actions">
-                <div class="d-flex">
-                    <select class="form-select form-select-sm" aria-label="Bulk actions">
-                        <option value="Delete">Delete</option>
-                        <option value="Archive">Edit</option>
-                    </select>
-                    <button class="btn btn-success btn-sm ms-2" type="button">Apply</button>
-                </div>
-            </div>
-        </div> -->
+        <div class="col-11">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="/stock/?free=1" class="btn btn-success rounded-card">Free</a>
+                <a href="#" class="btn btn-success rounded-card">In project</a>
+              </div>
+        </div>
 
         <div class="col-1">
             <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">+ Add</button>
@@ -93,70 +96,30 @@
 
 
 <div class="container my-2">
-    <div class="row">
-        <div class="card col-lg-12 col-md-8 cols-lg-3 mx-auto">
-            <div class="col-lg-12 col-md-8 cols-lg-3 mx-auto">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr class="fw-bolder fs-6 text-gray-800">
-                            <!-- <th></th> -->
-                            <th>ID</th>
-                            <th>Firm</th>
-                            <th>Paint code</th>
-                            <th>Color</th>
-                            <th>Volume</th>
-                            <th>Weight</th>
-                            <th>Project</th>
-                            <th>Acceptance date</th>
-                            <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for balloon in balloons %}
-                            <tr>
-                                <!-- <td class="align-middle white-space-nowrap">
-                                    <div class="form-check mb-0">
-                                        <input class="form-check-input" type="checkbox" id="checkbox-1" checked="false">
-                                    </div>
-                                </td> -->
-                                <td>{{ balloon.uid }}</td>
-                                <td>{{ balloon.firm }}</td>
-                                <td>{{ balloon.paint_code }}</td>
-                                <td>{{ balloon.color }}</td>
-                                <td>{{ balloon.volume }}</td>
-                                <td>{{ balloon.weight }}</td>
-                                <td>{{ balloon.project }}</td>
-                                <td>{{ balloon.acceptance }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ...
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="btn" href="{{ url_for('stock.edit', uid=balloon.uid) }}">Edit</a>
-                                            <button
-                                                id="delete"
-                                                class="btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteBalloonModal"
-                                                data-balloon-info="{{ balloon.firm }} {{ balloon.paint_code }}"
-                                                data-balloon-id="{{ balloon.uid }}"
-                                                href="#deleteBalloonModal"
-                                            >
-                                                Delete
-                                            </button>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5">
+        {% for entity in balloons %}
+            <div class="card rounded-card m-1">
+                <div class="row">
+                    <div class="col">
+                        <h5>Balloon: {{ entity.balloon.uid }}</h5>
+                    </div>
+                    <div class="col">
+                        <h4>{{ entity.balloon.weight }}</h4>
+                    </div>
+                </div>
+                <img src="/static/images/favicon/bal.webp" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">{{ entity.name_project }}</h5>
+                <h6>{{ entity.balloon.color }}</h6>
+                <a href="#" class="btn btn-success rounded-card">Edit</a>
+                <a href="#" class="btn btn-danger rounded-card" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
                 </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
+</div>
+
+
 
     <div class="modal fade" id="deleteBalloonModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
