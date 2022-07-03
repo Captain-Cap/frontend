@@ -17,6 +17,11 @@ def all_balloons():
     projects_map = {project.uid: project for project in projects}
     card_project = namedtuple('card_project', 'balloon name_project')
 
+    colors = []
+    for bal in balloons:
+        if bal.color not in colors:
+            colors.append(bal.color)
+
     models = []
     for balloon in balloons:
         if projects_map.get(balloon.project_id):
@@ -33,6 +38,7 @@ def all_balloons():
     return render_template(
         'stock.html',
         title='Balloons',
+        colors=colors,
         balloons=models,
         projects=projects,
         form=AddBalloonForm(),
