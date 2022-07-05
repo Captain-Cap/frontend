@@ -1,7 +1,7 @@
 import httpx
 import orjson
 
-from cap.api.schemas import ProjectsModel, BalloonModel
+from cap.api.schemas import BalloonModel, ProjectsModel
 
 
 class ProjectsApi:
