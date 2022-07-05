@@ -24,7 +24,7 @@ def all_balloons():
 
     models = []
     for balloon in balloons:
-        project = projects_map.get(balloon.project_id)
+        project = projects_map[balloon.project_id] if balloon.project_id else None
         project_name = project.name if project else 'No project'
         models.append(card_project(balloon, project_name))
 
