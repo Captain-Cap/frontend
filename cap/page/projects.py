@@ -17,12 +17,7 @@ def all_projects():
 @projects_view.get('/more/<int:uid>')
 def details(uid):
     name = request.args['name']
-    balloons = client.balloons.get_all()
-    balloon_project = [
-        balloon
-        for balloon in balloons
-        if balloon.project_id == uid
-    ]
+    balloon_project = client.projects.get_for_project(uid)
     return render_template(
         'more_projects.html',
         balloons=balloon_project,
