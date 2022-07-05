@@ -19,13 +19,6 @@ class BalloonModel(BaseModel):
     def acceptance(self) -> str:
         return self.acceptance_date.strftime('%m/%d/%Y %H:%M:%S')
 
-    @property
-    def project(self) -> int:
-        uid = 0
-        if self.project_id is not None:
-            uid = self.project_id
-        return uid
-
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
