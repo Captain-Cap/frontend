@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, PositiveInt
 
@@ -12,7 +13,7 @@ class BalloonModel(BaseModel):
     volume: int
     weight: float
     acceptance_date: datetime
-    project: str
+    project_id: Optional[int]
 
     @property
     def acceptance(self) -> str:

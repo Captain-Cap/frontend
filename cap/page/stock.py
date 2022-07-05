@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime
 from typing import Any
 
@@ -13,10 +14,25 @@ stock = Blueprint('stock', __name__)
 def all_balloons():
     balloons = client.balloons.get_all()
     projects = client.projects.get_all()
+    projects_map = {project.uid: project for project in projects}
+    card_project = namedtuple('card_project', 'balloon name_project')
+
+    colors = []
+    for bal in balloons:
+        if bal.color not in colors:
+            colors.append(bal.color)
+
+    models = []
+    for balloon in balloons:
+        project = projects_map[balloon.project_id] if balloon.project_id else None
+        project_name = project.name if project else 'No project'
+        models.append(card_project(balloon, project_name))
+
     return render_template(
         'stock.html',
         title='Balloons',
-        balloons=balloons,
+        colors=colors,
+        balloons=models,
         projects=projects,
         form=AddBalloonForm(),
     )
