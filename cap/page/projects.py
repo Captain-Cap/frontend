@@ -15,7 +15,7 @@ def all_projects():
 
 
 @projects_view.get('/more/<int:uid>')
-def more(uid):
+def details(uid):
     name = request.args['name']
     balloons = client.balloons.get_all()
     balloon_project = [
