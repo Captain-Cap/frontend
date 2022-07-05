@@ -73,7 +73,7 @@
             <p class="card-text">
             Some generated text. Description of something. Here will be the text describing the project.
             </p>
-            <a href="{{ url_for('projects.more', uid=projects.uid, name=projects.name) }}" target="_blank" class="btn btn-primary rounded-card">More</a>
+            <a href="{{ url_for('projects.details', uid=projects.uid, name=projects.name) }}" target="_blank" class="btn btn-primary rounded-card">More</a>
             <a href="{{ url_for('projects.edit_page', uid=projects.uid) }}" class="btn btn-success rounded-card">Edit</a>
             <a href="#" class="btn btn-danger rounded-card" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -1,7 +1,7 @@
 import httpx
 import orjson
 
-from cap.api.schemas import ProjectsModel
+from cap.api.schemas import ProjectsModel, BalloonModel
 
 
 class ProjectsApi:
@@ -26,3 +26,8 @@ class ProjectsApi:
         }
         response = httpx.put(f'{self.url}/api/v1/projects/', content=json_project, headers=headers)
         response.raise_for_status()
+
+    def get_for_project(self, uid: int) -> list[BalloonModel]:
+        response = httpx.get(f'{self.url}/api/v1/projects/{uid}/balloons/')
+        response.raise_for_status()
+        return [BalloonModel(**balloon) for balloon in response.json()]
