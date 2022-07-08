@@ -1,5 +1,4 @@
 from datetime import datetime
-from distutils.util import strtobool
 from typing import Any
 
 from flask import Blueprint, redirect, render_template, request, url_for
@@ -8,6 +7,28 @@ from cap.api import BalloonModel, client
 from cap.api.schemas import ProjectsModel
 
 stock = Blueprint('stock', __name__)
+
+
+def filter_color(balloons, color: str) -> list[BalloonModel]:
+    if color == 'No color':
+        return balloons
+
+    return [balloon for balloon in balloons if balloon.color == color]
+
+
+def to_model(
+    balloon: BalloonModel,
+    projects: dict[int, ProjectsModel],
+) -> tuple[BalloonModel, str]:
+    project = projects[balloon.project_id] if balloon.project_id else None
+    project_name = project.name if project else 'No project'
+    return balloon, project_name
+
+
+def get_projects_map():
+    projects = client.projects.get_all()
+    return {project.uid: project for project in projects}
+
 
 
 @stock.get('/')
@@ -35,33 +56,12 @@ def all_balloons():
         selected_color=selected_color,
         colors=colors,
         balloons=models,
-        projects=projects,
+        projects=list(projects.values()),
     )
 
 
-def filter_color(balloons, color: str) -> list[BalloonModel]:
-    if color == 'No color':
-        return balloons
-
-    return [balloon for balloon in balloons if balloon.color == color]
-
-
-def to_model(
-    balloon: BalloonModel,
-    projects: dict[int, ProjectsModel],
-) -> tuple[BalloonModel, str]:
-    project = projects[balloon.project_id] if balloon.project_id else None
-    project_name = project.name if project else 'No project'
-    return balloon, project_name
-
-
-def get_projects_map():
-    projects = client.projects.get_all()
-    return {project.uid: project for project in projects}
-
-
-@stock.post('/sort')
-def sort():
+@stock.post('/search')
+def search():
     payload = dict(request.form)
 
     return redirect(url_for(
@@ -76,6 +76,8 @@ def add_balloon():
     payload: dict[str, Any] = dict(request.form)
     payload['uid'] = -1
     payload['acceptance_date'] = datetime.now()
+    if payload['project_id'] == '':
+        payload['project_id'] = None
 
     balloon = BalloonModel(**payload)
     client.balloons.add(balloon)

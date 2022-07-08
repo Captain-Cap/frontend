@@ -41,7 +41,7 @@
 <div class="container my-4">
     <div class="row justify-content-end">
 
-        <form action="/stock/sort" method="post">
+        <form action="{{ url_for('stock.search') }}" method="post">
             <div class="row justify-content-start">
                 <div class="col-1">
                     <input
@@ -69,7 +69,7 @@
                     </select>
                 </div>
                 <div class="col">
-                    <button type="submit" class="btn btn-success">Apply</button>
+                    <button type="submit" class="btn btn-success">Search</button>
                 </div>
             </div>
         </form>
