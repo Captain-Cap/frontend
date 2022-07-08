@@ -71,6 +71,7 @@ def sort():
         'stock.html',
         colors=colors,
         balloons=models,
+        projects=projects.values(),
     )
 
 
