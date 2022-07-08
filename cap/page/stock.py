@@ -1,25 +1,23 @@
-from collections import namedtuple
 from datetime import datetime
-from typing import Any
-
 from distutils.util import strtobool
+from typing import Any
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from cap.api import BalloonModel, client
+from cap.api.schemas import ProjectsModel
 from cap.forms import AddBalloonForm
-from cap.page.attributes import attributes
 
 stock = Blueprint('stock', __name__)
 
 
 @stock.get('/')
 def all_balloons():
-    projects = client.projects.get_all()
-    card_project = namedtuple('card_project', 'balloon name_project')
+    projects = get_projects_map()
+    balloons = client.balloons.get_all()
 
-    models = [card_project(*model) for model in attributes.balloon.all(status=True)]
-    colors = attributes.balloon.color_from([model.balloon for model in models])
+    models = [to_model(balloon, projects) for balloon in balloons]
+    colors = {balloon.color for balloon in balloons}
 
     return render_template(
         'stock.html',
@@ -31,22 +29,48 @@ def all_balloons():
     )
 
 
+def filter_color(balloons, color: str) -> list[BalloonModel]:
+    if color == 'No color':
+        return balloons
+
+    return [balloon for balloon in balloons if balloon.color == color]
+
+
+def to_model(
+    balloon: BalloonModel,
+    projects: dict[int, ProjectsModel],
+) -> tuple[BalloonModel, str]:
+    project = projects[balloon.project_id] if balloon.project_id else None
+    project_name = project.name if project else 'No project'
+    return balloon, project_name
+
+
+def get_projects_map():
+    projects = client.projects.get_all()
+    return {project.uid: project for project in projects}
+
+
 @stock.post('/sort')
 def sort():
     payload = dict(request.form)
-    card_project = namedtuple('card_project', 'balloon name_project')
+    projects = get_projects_map()
 
-    models = [
-        card_project(*model)
-        for model in attributes.balloon.all(status=bool(strtobool(payload['flexRadio'])))
-    ]
-    colors = attributes.balloon.color_from([model.balloon for model in models])
-    entity = attributes.balloon.by_color(models, payload['Color'])
+    freeonly = bool(strtobool(payload['flexRadio']))
+    if freeonly:
+        balloons = client.balloons.get_free()
+    else:
+        balloons = client.balloons.get_all()
+
+    selected_color = payload['Color']
+    filtered_balloons = filter_color(balloons, selected_color)
+
+    models = [to_model(balloon, projects) for balloon in filtered_balloons]
+    colors = {balloon.color for balloon in balloons}
 
     return render_template(
         'stock.html',
         colors=colors,
-        balloons=entity,
+        balloons=models,
     )
 
 
