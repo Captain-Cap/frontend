@@ -55,8 +55,7 @@ def sort():
     payload = dict(request.form)
     projects = get_projects_map()
 
-    freeonly = bool(strtobool(payload['flexRadio']))
-    if freeonly:
+    if payload.get('flexRadio') == 'on':
         balloons = client.balloons.get_free()
     else:
         balloons = client.balloons.get_all()
