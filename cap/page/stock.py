@@ -6,7 +6,6 @@ from flask import Blueprint, redirect, render_template, request, url_for
 
 from cap.api import BalloonModel, client
 from cap.api.schemas import ProjectsModel
-from cap.forms import AddBalloonForm
 
 stock = Blueprint('stock', __name__)
 
@@ -14,18 +13,29 @@ stock = Blueprint('stock', __name__)
 @stock.get('/')
 def all_balloons():
     projects = get_projects_map()
-    balloons = client.balloons.get_all()
+
+    free_only = bool(int(request.args.get('free', '0')))
+    if free_only:
+        balloons = client.balloons.get_free()
+    else:
+        balloons = client.balloons.get_all()
+
+    colors = {balloon.color for balloon in balloons}
+
+    selected_color = request.args.get('color')
+    if selected_color:
+        balloons = filter_color(balloons, selected_color)
 
     models = [to_model(balloon, projects) for balloon in balloons]
-    colors = {balloon.color for balloon in balloons}
 
     return render_template(
         'stock.html',
         title='Balloons',
+        free_only=free_only,
+        selected_color=selected_color,
         colors=colors,
         balloons=models,
         projects=projects,
-        form=AddBalloonForm(),
     )
 
 
@@ -53,25 +63,12 @@ def get_projects_map():
 @stock.post('/sort')
 def sort():
     payload = dict(request.form)
-    projects = get_projects_map()
 
-    if payload.get('flexRadio') == 'on':
-        balloons = client.balloons.get_free()
-    else:
-        balloons = client.balloons.get_all()
-
-    selected_color = payload['Color']
-    filtered_balloons = filter_color(balloons, selected_color)
-
-    models = [to_model(balloon, projects) for balloon in filtered_balloons]
-    colors = {balloon.color for balloon in balloons}
-
-    return render_template(
-        'stock.html',
-        colors=colors,
-        balloons=models,
-        projects=projects.values(),
-    )
+    return redirect(url_for(
+        'stock.all_balloons',
+        free=int(payload.get('flexRadio') == 'on'),
+        color=payload.get('Color'),
+    ))
 
 
 @stock.post('/add_balloon')
