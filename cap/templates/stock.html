@@ -99,9 +99,9 @@
                                     <label for="floatingPassword">Weight</label>
                                 </div>
                                 <div class="form-floating mb-2">
-                                    <select id="disabledSelect" class="form-select" name="project">
+                                    <select id="disabledSelect" class="form-select" name="project_id">
                                         {% for project in projects %}
-                                            <option value="{{ project.name }}">{{ project.name }}</option>
+                                            <option value="{{ project.uid }}">{{ project.name }}</option>
                                         {% endfor %}
                                     </select>
                                     <label for="floatingPassword">Project</label>
