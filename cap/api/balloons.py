@@ -14,6 +14,11 @@ class BalloonApi:
         response.raise_for_status()
         return [BalloonModel(**balloon) for balloon in response.json()]
 
+    def get_free(self) -> list[BalloonModel]:
+        response = httpx.get(f'{self.url}/api/v1/balloons/free')
+        response.raise_for_status()
+        return [BalloonModel(**balloon) for balloon in response.json()]
+
     def get_by_id(self, uid: int) -> BalloonModel:
         response = httpx.get(f'{self.url}/api/v1/balloons/{uid}')
         response.raise_for_status()
