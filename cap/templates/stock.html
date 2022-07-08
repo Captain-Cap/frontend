@@ -118,21 +118,21 @@
 
 <div class="container my-2">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5">
-        {% for entity in balloons %}
+        {% for balloon, project_name in balloons %}
             <div class="card rounded-card m-1">
                 <div class="row">
                     <div class="col">
-                        <h5>Balloon: {{ entity.balloon.uid }}</h5>
+                        <h5>Balloon: {{ balloon.uid }}</h5>
                     </div>
                     <div class="col">
-                        <h4>{{ entity.balloon.weight }}</h4>
+                        <h4>{{ balloon.weight }}</h4>
                     </div>
                 </div>
                 <img src="/static/images/favicon/bal.webp" class="card-img-top" alt="...">
                 <div class="card-body">
-                <h5 class="card-title">{{ entity.name_project }}</h5>
-                <h6>{{ entity.balloon.color }}</h6>
-                <a href="edit/{{ entity.balloon.uid }}" class="btn btn-success rounded-card">Edit</a>
+                <h5 class="card-title">{{ project_name }}</h5>
+                <h6>{{ balloon.color }}</h6>
+                <a href="edit/{{ balloon.uid }}" class="btn btn-success rounded-card">Edit</a>
                 <a href="#" class="btn btn-danger rounded-card" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
                 </div>
             </div>
