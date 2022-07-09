@@ -26,7 +26,7 @@ class BalloonModel(BaseModel):
 
 class ProjectsModel(BaseModel):
 
-    uid: PositiveInt
+    uid: int
     name: str
     created_at: datetime
 

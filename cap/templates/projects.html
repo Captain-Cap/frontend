@@ -42,14 +42,10 @@
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
-                        <form action="/stock/add_balloon" method="post">
+                        <form action="/projects/add" method="post">
                                 <div class="form-floating mb-2">
                                     <input type="text" class="form-control" name="name" id="name" required>
                                     <label for="floatingInput">Name project</label>
-                                </div>
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control" name="description" id="description" required>
-                                    <label for="floatingPassword">description</label>
                                 </div>
                                 <button type="submit" class="btn btn-success">Add</button>
                         </form>
@@ -75,24 +71,7 @@
             </p>
             <a href="{{ url_for('projects.details', uid=projects.uid, name=projects.name) }}" target="_blank" class="btn btn-primary rounded-card">More</a>
             <a href="{{ url_for('projects.edit_page', uid=projects.uid) }}" class="btn btn-success rounded-card">Edit</a>
-            <a href="#" class="btn btn-danger rounded-card" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Detele</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete the project?
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-danger">Delete</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <a href="{{ url_for('projects.delete_page', uid=projects.uid) }}" class="btn btn-danger rounded-card">Delete</a>
         </div>
         </div>
     </div>

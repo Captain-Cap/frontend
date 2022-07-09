@@ -1,5 +1,37 @@
 {% extends "base.html" %}
 
+
+{% block styles %}
+    <style>
+        .card {
+        border-radius: 1em;
+        text-align: center;
+        padding: 1em;
+        }
+        .card:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+        border-radius: 90%;
+        width: 60%;
+        margin: auto;
+        }
+        .rounded-img {
+            width: 50%;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 0.5em;
+            margin-bottom: 1em;
+        }
+        .rounded-card {
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            padding: 0.5em;
+            margin-bottom: 1em;
+        }
+
+        </style>
+{% endblock %}
+
 {% block content %}
 
 <div class="container my-2">
