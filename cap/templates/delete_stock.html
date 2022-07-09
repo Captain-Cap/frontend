@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-3">
+    <div class="row">
+        <div class="col">
+            <h4>Are you sure you want to remove the aerosol can ID: {{ uid }}?</h4>
+            <a href="{{ url_for('stock.all_balloons') }}" class="btn btn-success rounded-card">Exit</a>
+            <a href="{{ url_for('stock.delete', uid=uid) }}" class="btn btn-danger rounded-card">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

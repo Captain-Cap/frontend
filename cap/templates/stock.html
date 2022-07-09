@@ -105,6 +105,7 @@
                                 </div>
                                 <div class="form-floating mb-2">
                                     <select id="disabledSelect" class="form-select" name="project_id">
+                                        <option value="">No project</option>
                                         {% for project in projects %}
                                             <option value="{{ project.uid }}">{{ project.name }}</option>
                                         {% endfor %}
@@ -135,41 +136,13 @@
                 </div>
                 <img src="/static/images/favicon/bal.webp" class="card-img-top" alt="...">
                 <div class="card-body">
-                <h5 class="card-title">{{ project_name }}</h5>
-                <h6>{{ balloon.color }}</h6>
-                <a href="edit/{{ balloon.uid }}" class="btn btn-success rounded-card">Edit</a>
-                <a href="#" class="btn btn-danger rounded-card" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
+                    <h5 class="card-title">{{ project_name }}</h5>
+                    <h6>{{ balloon.color }}</h6>
+                    <a href="edit/{{ balloon.uid }}" class="btn btn-success rounded-card">Edit</a>
+                    <a href="{{ url_for('stock.page_delete', uid=balloon.uid) }}" class="btn btn-danger rounded-card">Delete</a>
                 </div>
             </div>
         {% endfor %}
     </div>
-</div>
-
-
-
-    <div class="modal fade" id="deleteBalloonModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Удалить балончик</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ url_for('stock.delete') }}" method="POST">
-                    <div class="form-group">
-                        <input type="hidden" name="uid">
-                        <small id="deleteBalloonInfo" class="form-text text-muted">info</small>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Delete</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-            </div>
-        </div>
-        </div>
 </div>
 {% endblock %}

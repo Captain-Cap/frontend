@@ -30,7 +30,6 @@ def get_projects_map():
     return {project.uid: project for project in projects}
 
 
-
 @stock.get('/')
 def all_balloons():
     projects = get_projects_map()
@@ -85,9 +84,13 @@ def add_balloon():
     return redirect(url_for('stock.all_balloons'))
 
 
-@stock.post('/delete')
-def delete():
-    uid = request.form['uid']
+@stock.get('/page_delete/<int:uid>')
+def page_delete(uid):
+    return render_template('delete_stock.html', uid=uid)
+
+
+@stock.get('/delete/<int:uid>')
+def delete(uid: int):
     client.balloons.delete(uid)
     return redirect(url_for('stock.all_balloons'))
 
@@ -104,6 +107,8 @@ def edit(uid):
     payload: dict[str, Any] = dict(request.form)
     payload['uid'] = uid
     payload['acceptance_date'] = -1
+    if payload['project_id'] == '':
+        payload['project_id'] = None
     balloon = BalloonModel(**payload)
     client.balloons.update(balloon)
     return redirect(url_for('stock.all_balloons'))
