@@ -2,31 +2,24 @@ from collections import namedtuple
 from datetime import datetime
 from typing import Any
 
+from distutils.util import strtobool
+
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from cap.api import BalloonModel, client
 from cap.forms import AddBalloonForm
+from cap.page.attributes import attributes
 
 stock = Blueprint('stock', __name__)
 
 
 @stock.get('/')
 def all_balloons():
-    balloons = client.balloons.get_all()
     projects = client.projects.get_all()
-    projects_map = {project.uid: project for project in projects}
     card_project = namedtuple('card_project', 'balloon name_project')
 
-    colors = []
-    for bal in balloons:
-        if bal.color not in colors:
-            colors.append(bal.color)
-
-    models = []
-    for balloon in balloons:
-        project = projects_map[balloon.project_id] if balloon.project_id else None
-        project_name = project.name if project else 'No project'
-        models.append(card_project(balloon, project_name))
+    models = [card_project(*model) for model in attributes.balloon.all(status=True)]
+    colors = attributes.balloon.color_from([model.balloon for model in models])
 
     return render_template(
         'stock.html',
@@ -35,6 +28,25 @@ def all_balloons():
         balloons=models,
         projects=projects,
         form=AddBalloonForm(),
+    )
+
+
+@stock.post('/sort')
+def sort():
+    payload = dict(request.form)
+    card_project = namedtuple('card_project', 'balloon name_project')
+
+    models = [
+        card_project(*model)
+        for model in attributes.balloon.all(status=bool(strtobool(payload['flexRadio'])))
+    ]
+    colors = attributes.balloon.color_from([model.balloon for model in models])
+    entity = attributes.balloon.by_color(models, payload['Color'])
+
+    return render_template(
+        'stock.html',
+        colors=colors,
+        balloons=entity,
     )
 
 
