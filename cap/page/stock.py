@@ -1,53 +1,74 @@
-from collections import namedtuple
 from datetime import datetime
 from typing import Any
-
-from distutils.util import strtobool
 
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from cap.api import BalloonModel, client
-from cap.forms import AddBalloonForm
-from cap.page.attributes import attributes
+from cap.api.schemas import ProjectsModel
 
 stock = Blueprint('stock', __name__)
 
 
+def filter_color(balloons, color: str) -> list[BalloonModel]:
+    if color == 'No color':
+        return balloons
+
+    return [balloon for balloon in balloons if balloon.color == color]
+
+
+def to_model(
+    balloon: BalloonModel,
+    projects: dict[int, ProjectsModel],
+) -> tuple[BalloonModel, str]:
+    project = projects[balloon.project_id] if balloon.project_id else None
+    project_name = project.name if project else 'No project'
+    return balloon, project_name
+
+
+def get_projects_map():
+    projects = client.projects.get_all()
+    return {project.uid: project for project in projects}
+
+
+
 @stock.get('/')
 def all_balloons():
-    projects = client.projects.get_all()
-    card_project = namedtuple('card_project', 'balloon name_project')
+    projects = get_projects_map()
 
-    models = [card_project(*model) for model in attributes.balloon.all(status=True)]
-    colors = attributes.balloon.color_from([model.balloon for model in models])
+    free_only = bool(int(request.args.get('free', '0')))
+    if free_only:
+        balloons = client.balloons.get_free()
+    else:
+        balloons = client.balloons.get_all()
+
+    colors = {balloon.color for balloon in balloons}
+
+    selected_color = request.args.get('color')
+    if selected_color:
+        balloons = filter_color(balloons, selected_color)
+
+    models = [to_model(balloon, projects) for balloon in balloons]
 
     return render_template(
         'stock.html',
         title='Balloons',
+        free_only=free_only,
+        selected_color=selected_color,
         colors=colors,
         balloons=models,
-        projects=projects,
-        form=AddBalloonForm(),
+        projects=list(projects.values()),
     )
 
 
-@stock.post('/sort')
-def sort():
+@stock.post('/search')
+def search():
     payload = dict(request.form)
-    card_project = namedtuple('card_project', 'balloon name_project')
 
-    models = [
-        card_project(*model)
-        for model in attributes.balloon.all(status=bool(strtobool(payload['flexRadio'])))
-    ]
-    colors = attributes.balloon.color_from([model.balloon for model in models])
-    entity = attributes.balloon.by_color(models, payload['Color'])
-
-    return render_template(
-        'stock.html',
-        colors=colors,
-        balloons=entity,
-    )
+    return redirect(url_for(
+        'stock.all_balloons',
+        free=int(payload.get('flexRadio') == 'on'),
+        color=payload.get('Color'),
+    ))
 
 
 @stock.post('/add_balloon')
@@ -55,6 +76,8 @@ def add_balloon():
     payload: dict[str, Any] = dict(request.form)
     payload['uid'] = -1
     payload['acceptance_date'] = datetime.now()
+    if payload['project_id'] == '':
+        payload['project_id'] = None
 
     balloon = BalloonModel(**payload)
     client.balloons.add(balloon)
